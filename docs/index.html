@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>warfront — downloads</title>
+<style>
+:root { color-scheme: dark; }
+body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; background: #0d1117; color: #e6edf3; }
+a { color: #58a6ff; }
+.card { border: 1px solid #30363d; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; background: #161b22; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; }
+.btn { display: block; padding: 0.7rem; text-align: center; border: 1px solid #30363d; border-radius: 6px; text-decoration: none; background: #21262d; color: #e6edf3; }
+.btn:hover { background: #30363d; }
+.btn small { display: block; opacity: 0.7; font-size: 0.8em; }
+pre { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 0.75rem; overflow-x: auto; }
+.muted { opacity: 0.7; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+th, td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #30363d; }
+</style>
+</head>
+<body>
+<h1>warfront — downloads</h1>
+<p class="muted">Public binaries. Source stays private. Pick client + server for your OS from the latest release.</p>
+<div id="latest" class="card">Loading latest release…</div>
+<div class="card">
+<h2>Run</h2>
+<pre>tar -xzf warfront-server-&lt;TAG&gt;-linux-x86_64.tar.gz
+tar -xzf warfront-client-&lt;TAG&gt;-linux-x86_64.tar.gz
+./warfront-server 0.0.0.0:5000
+./warfront-client 127.0.0.1:5000</pre>
+<p class="muted">Windows (PowerShell): Expand-Archive each zip, then <code>.\warfront-server.exe</code> and <code>.\warfront-client.exe 127.0.0.1:5000</code>. Client needs GPU + desktop (X11/Wayland on Linux). Server is headless.</p>
+<h2>Verify</h2>
+<pre>sha256sum -c SHA256SUMS.txt</pre>
+</div>
+<div class="card">
+<h2>All releases</h2>
+<div id="history" class="muted">Loading…</div>
+</div>
+<p class="muted"><a href="https://github.com/joaosimsic/warfront-releases/releases">All releases on GitHub</a></p>
+<script>
+const OWNER = "joaosimsic";
+const REPO = "warfront-releases";
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=20`;
+function pick(assets, part, os) {
+  return assets.find(a => a.name.includes(`warfront-${part}-`) && a.name.includes(os));
+}
+function btn(asset, label) {
+  if (!asset) return `<span class="btn muted">${label}<small>missing</small></span>`;
+  const mb = (asset.size / 1048576).toFixed(1);
+  return `<a class="btn" href="${asset.browser_download_url}">${label}<small>${asset.name} · ${mb} MB</small></a>`;
+}
+async function main() {
+  const res = await fetch(API);
+  const rels = await res.json();
+  if (!Array.isArray(rels) || !rels.length) {
+    document.getElementById("latest").textContent = "No releases yet. Push a v* tag in the private warfront repo.";
+    document.getElementById("history").textContent = "—";
+    return;
+  }
+  const latest = rels[0];
+  const a = latest.assets || [];
+  document.getElementById("latest").innerHTML =
+    `<h2>${latest.tag_name} <span class="muted">· ${new Date(latest.published_at).toLocaleDateString()}</span></h2>` +
+    (latest.body ? `<p>${latest.body.slice(0, 500)}</p>` : "") +
+    `<div class="grid">` +
+    btn(pick(a, "client", "linux"), "Client · Linux") +
+    btn(pick(a, "server", "linux"), "Server · Linux") +
+    btn(pick(a, "client", "windows"), "Client · Windows") +
+    btn(pick(a, "server", "windows"), "Server · Windows") +
+    `</div>`;
+  document.getElementById("history").innerHTML =
+    `<table><tr><th>Tag</th><th>Date</th><th>Assets</th></tr>` +
+    rels.map(r => {
+      const n = (r.assets || []).length;
+      return `<tr><td><a href="${r.html_url}">${r.tag_name}</a></td><td>${new Date(r.published_at).toLocaleDateString()}</td><td>${n} files</td></tr>`;
+    }).join("") + `</table>`;
+}
+main().catch(e => {
+  document.getElementById("latest").textContent = "Failed to load releases: " + e;
+});
+</script>
+</body>
+</html>
