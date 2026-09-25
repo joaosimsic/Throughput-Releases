@@ -1,11 +1,11 @@
-# warfront-releases
+# Throughput-Releases
 
-Public download page + binaries for warfront. Source stays private in `joaosimsic/warfront`.
+Public download page + binaries for Throughput. Source stays private in `joaosimsic/Throughput`.
 
-- Site: https://joaosimsic.github.io/warfront-releases/
+- Site: https://joaosimsic.github.io/Throughput-Releases/
 - Each `v*` tag in the private repo mirrors 4 split assets here:
-  - `warfront-client-<TAG>-linux-x86_64.tar.gz`
-  - `warfront-server-<TAG>-linux-x86_64.tar.gz`
-  - `warfront-client-<TAG>-windows-x86_64.zip`
-  - `warfront-server-<TAG>-windows-x86_64.zip`
+  - `Throughput-client-<TAG>-linux-x86_64.tar.gz`
+  - `Throughput-server-<TAG>-linux-x86_64.tar.gz`
+  - `Throughput-client-<TAG>-windows-x86_64.zip`
+  - `Throughput-server-<TAG>-windows-x86_64.zip`
   - `SHA256SUMS.txt`

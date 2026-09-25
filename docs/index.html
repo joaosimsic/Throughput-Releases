@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>warfront — downloads</title>
+<title>Throughput — downloads</title>
 <style>
 :root { color-scheme: dark; }
 body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; background: #0d1117; color: #e6edf3; }
@@ -20,16 +20,16 @@ th, td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #30363d; }
 </style>
 </head>
 <body>
-<h1>warfront — downloads</h1>
+<h1>Throughput — downloads</h1>
 <p class="muted">Public binaries. Source stays private. Pick client + server for your OS from the latest release.</p>
 <div id="latest" class="card">Loading latest release…</div>
 <div class="card">
 <h2>Run</h2>
-<pre>tar -xzf warfront-server-&lt;TAG&gt;-linux-x86_64.tar.gz
-tar -xzf warfront-client-&lt;TAG&gt;-linux-x86_64.tar.gz
-./warfront-server 0.0.0.0:5000
-./warfront-client 127.0.0.1:5000</pre>
-<p class="muted">Windows (PowerShell): Expand-Archive each zip, then <code>.\warfront-server.exe</code> and <code>.\warfront-client.exe 127.0.0.1:5000</code>. Client needs GPU + desktop (X11/Wayland on Linux). Server is headless.</p>
+<pre>tar -xzf Throughput-server-&lt;TAG&gt;-linux-x86_64.tar.gz
+tar -xzf Throughput-client-&lt;TAG&gt;-linux-x86_64.tar.gz
+./Throughput-server 0.0.0.0:5000
+./Throughput-client 127.0.0.1:5000</pre>
+<p class="muted">Windows (PowerShell): Expand-Archive each zip, then <code>.\Throughput-server.exe</code> and <code>.\Throughput-client.exe 127.0.0.1:5000</code>. Client needs GPU + desktop (X11/Wayland on Linux). Server is headless.</p>
 <h2>Verify</h2>
 <pre>sha256sum -c SHA256SUMS.txt</pre>
 </div>
@@ -37,13 +37,13 @@ tar -xzf warfront-client-&lt;TAG&gt;-linux-x86_64.tar.gz
 <h2>All releases</h2>
 <div id="history" class="muted">Loading…</div>
 </div>
-<p class="muted"><a href="https://github.com/joaosimsic/warfront-releases/releases">All releases on GitHub</a></p>
+<p class="muted"><a href="https://github.com/joaosimsic/Throughput-Releases/releases">All releases on GitHub</a></p>
 <script>
 const OWNER = "joaosimsic";
-const REPO = "warfront-releases";
+const REPO = "Throughput-Releases";
 const API = `https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=20`;
 function pick(assets, part, os) {
-  return assets.find(a => a.name.includes(`warfront-${part}-`) && a.name.includes(os));
+  return assets.find(a => a.name.includes(`Throughput-${part}-`) && a.name.includes(os));
 }
 function btn(asset, label) {
   if (!asset) return `<span class="btn muted">${label}<small>missing</small></span>`;
@@ -54,7 +54,7 @@ async function main() {
   const res = await fetch(API);
   const rels = await res.json();
   if (!Array.isArray(rels) || !rels.length) {
-    document.getElementById("latest").textContent = "No releases yet. Push a v* tag in the private warfront repo.";
+    document.getElementById("latest").textContent = "No releases yet. Push a v* tag in the private Throughput repo.";
     document.getElementById("history").textContent = "—";
     return;
   }
