@@ -25,11 +25,11 @@ th, td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #30363d; }
 <div id="latest" class="card">Loading latest release…</div>
 <div class="card">
 <h2>Run</h2>
-<pre>tar -xzf Throughput-server-&lt;TAG&gt;-linux-x86_64.tar.gz
-tar -xzf Throughput-client-&lt;TAG&gt;-linux-x86_64.tar.gz
-./Throughput-server 0.0.0.0:5000
-./Throughput-client 127.0.0.1:5000</pre>
-<p class="muted">Windows (PowerShell): Expand-Archive each zip, then <code>.\Throughput-server.exe</code> and <code>.\Throughput-client.exe 127.0.0.1:5000</code>. Client needs GPU + desktop (X11/Wayland on Linux). Server is headless.</p>
+<pre>tar -xzf throughput-server-&lt;TAG&gt;-linux-x86_64.tar.gz
+tar -xzf throughput-client-&lt;TAG&gt;-linux-x86_64.tar.gz
+./throughput-server 0.0.0.0:5000
+./throughput-client 127.0.0.1:5000</pre>
+<p class="muted">Windows (PowerShell): Expand-Archive each zip, then <code>.\throughput-server.exe</code> and <code>.\throughput-client.exe 127.0.0.1:5000</code>. Client needs GPU + desktop (X11/Wayland on Linux). Server is headless.</p>
 <h2>Verify</h2>
 <pre>sha256sum -c SHA256SUMS.txt</pre>
 </div>
@@ -43,7 +43,8 @@ const OWNER = "joaosimsic";
 const REPO = "Throughput-Releases";
 const API = `https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=20`;
 function pick(assets, part, os) {
-  return assets.find(a => a.name.includes(`Throughput-${part}-`) && a.name.includes(os));
+  const needle = `throughput-${part}-`.toLowerCase();
+  return assets.find(a => a.name.toLowerCase().includes(needle) && a.name.toLowerCase().includes(os));
 }
 function btn(asset, label) {
   if (!asset) return `<span class="btn muted">${label}<small>missing</small></span>`;
